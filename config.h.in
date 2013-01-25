@@ -6,3 +6,5 @@
 #cmakedefine HAVE_ENDIAN_H
 #cmakedefine HAVE_MACHINE_ENDIAN_H
 #cmakedefine HAVE_SOUNDCARD_H
+#cmakedefine HAVE_LIBJACK
+#cmakedefine HAVE_LIBASOUND
