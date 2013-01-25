@@ -1,0 +1,8 @@
+#cmakedefine VERSION "${VERSION}"
+#cmakedefine HAVE_U_INT16_T
+#cmakedefine HAVE_U_INT32_T
+#cmakedefine HAVE_U_INT64_T
+#cmakedefine HAVE_ASOUNDLIB_H
+#cmakedefine HAVE_ENDIAN_H
+#cmakedefine HAVE_MACHINE_ENDIAN_H
+#cmakedefine HAVE_SOUNDCARD_H
