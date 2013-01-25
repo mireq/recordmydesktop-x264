@@ -1,0 +1,49 @@
+If you got this from cvs you need to have automake installed and run:
+
+~$ cd recordmydesktop           #remeber to cd in the directory of the module
+                                #you checked out
+~$ sh autogen.sh
+~$ ./configure
+~$ make
+~$ sudo make install
+
+If you got a release tarball, to compile the program you have to go through the regular drill:
+
+~$ gzip -d recordmydesktop-x.y.z.tar.gz
+~$ tar -xvf recordmydesktop-x.y.z.tar
+~$ cd recordmydesktop-x.y.z
+~$ ./configure
+~$ make
+~$ sudo make install
+
+
+You will need the development headers(i.e. packages ending with -dev or -devel
+depending on the distribution you use) for the following:
+
+X
+libICE-dev
+libSM-dev
+libXext
+libXdamage
+libXfixes
+libogg
+libvorbis
+libtheora
+
+If you want to compile with ALSA support, you will also
+need the libasound headers.If they are not found, OSS
+will be used and you must have the sys/soundcard.h header.
+To use OSS regardless of whether or not you have the ALSA
+headers, you can use the --enable-oss switch during
+configuration.
+
+
+
+Last, you need the regular headers, plus the ones for pthreads
+(both of which you should have if you have compiled anything else before).
+
+Of the above, the most likely to be missing are probably those of libXdamage and libtheora
+but any recent linux distribution should offer an easy way to get them.
+
+
+
