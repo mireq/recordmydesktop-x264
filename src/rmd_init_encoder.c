@@ -188,7 +188,7 @@ void rmdInitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready){
     enc_data_t->m_th_inf.keyframe_auto_threshold      = 80;
     enc_data_t->m_th_inf.keyframe_mindistance         = 8;
     enc_data_t->m_th_inf.noise_sensitivity            = 1;
-    enc_data_t->m_th_inf.sharpness                    = 2;
+    enc_data_t->m_th_inf.sharpness                    = 1;
 
     theora_encode_init(&enc_data_t->m_th_st,&enc_data_t->m_th_inf);
 

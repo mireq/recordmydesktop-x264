@@ -49,7 +49,7 @@
 //but the definitions bellow are only
 //for convenience anyway.
 #define Y_UNIT_BYTES    0x0100
-#define UV_UNIT_BYTES   0x0040
+#define UV_UNIT_BYTES   0x0100
 
 
 //The frame after retrieval.

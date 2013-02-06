@@ -117,11 +117,7 @@ extern u_int32_t *yblocks,
                           _ur,_ug,_ubvr,_vg,_vb,\
                           __sampling_type,\
                           __bit_depth__)\
-            if(__sampling_type==__PXL_AVERAGE){\
-                CALC_TVAL_AVG_##__bit_depth__(t_val,datapi,datapi_next)\
-            }\
-            else\
-                t_val=*datapi;\
+            t_val=*datapi;\
             *yuv_u=\
             _ur[__RVALUE_##__bit_depth__(t_val)] +\
             _ug[__GVALUE_##__bit_depth__(t_val)] +\
@@ -142,8 +138,8 @@ extern u_int32_t *yblocks,
                          __bit_depth__){  \
     int k,i;\
     register u_int##__bit_depth__##_t t_val;\
-    register unsigned char  *yuv_u=yuv->u+x_tm/2+(y_tm*yuv->uv_width)/2,\
-                            *yuv_v=yuv->v+x_tm/2+(y_tm*yuv->uv_width)/2,\
+    register unsigned char  *yuv_u=yuv->u+x_tm+(y_tm*yuv->uv_width),\
+                            *yuv_v=yuv->v+x_tm+(y_tm*yuv->uv_width),\
                             *_ur=Ur,*_ug=Ug,*_ubvr=UbVr,\
                             *_vg=Vg,*_vb=Vb;\
     register u_int##__bit_depth__##_t *datapi=(u_int##__bit_depth__##_t *)data,\
@@ -151,8 +147,8 @@ extern u_int32_t *yblocks,
     if(__sampling_type==__PXL_AVERAGE){\
         datapi_next=datapi+width_tm;\
     }\
-    for(k=0;k<height_tm;k+=2){\
-        for(i=0;i<width_tm;i+=2){\
+    for(k=0;k<height_tm;k++){\
+        for(i=0;i<width_tm;i++){\
             UPDATE_A_UV_PIXEL(  yuv_u,\
                                 yuv_v,\
                                 t_val,\
@@ -161,17 +157,12 @@ extern u_int32_t *yblocks,
                                 _ur,_ug,_ubvr,_vg,_vb,\
                                 __sampling_type,\
                                 __bit_depth__)\
-            datapi+=2;\
-            if(__sampling_type==__PXL_AVERAGE)\
-                datapi_next+=2;\
+            datapi++;\
             yuv_u++;\
             yuv_v++;\
         }\
-        yuv_u+=(yuv->y_width-width_tm)/2;\
-        yuv_v+=(yuv->y_width-width_tm)/2;\
-        datapi+=width_tm;\
-        if(__sampling_type==__PXL_AVERAGE)\
-            datapi_next+=width_tm;\
+        yuv_u+=(yuv->y_width-width_tm);\
+        yuv_v+=(yuv->y_width-width_tm);\
     }\
 }
 
@@ -222,25 +213,23 @@ extern u_int32_t *yblocks,
                              y_offset,\
                              no_pixel){\
     int i,k,j=0;\
-    int x_2=x_tm/2,y_2=y_tm/2,y_width_2=(yuv)->y_width/2;\
+    int x_2=x_tm,y_2=y_tm,y_width_2=(yuv)->y_width;\
     for(k=y_offset;k<y_offset+height_tm;k++){\
         for(i=x_offset;i<x_offset+width_tm;i++){\
-            j=k*16+i;\
+            j=k*8+i;\
             if(data_tm[(j*4)]!=(no_pixel)){\
                 (yuv)->y[x_tm+(i-x_offset)+((k-y_offset)+y_tm)*(yuv)->y_width]=\
                     Yr[data_tm[(j*4)+__RBYTE]] +\
                     Yg[data_tm[(j*4)+__GBYTE]] +\
                     Yb[data_tm[(j*4)+__BBYTE]];\
-                if((k%2)&&(i%2)){\
-                    yuv->u[x_2+(i-x_offset)/2+((k-y_offset)/2+y_2)*y_width_2]=\
-                        Ur[data_tm[(k*width_tm+i)*4+__RBYTE]] +\
-                        Ug[data_tm[(k*width_tm+i)*4+__GBYTE]] +\
-                        UbVr[data_tm[(k*width_tm+i)*4+__BBYTE]];\
-                    yuv->v[x_2+(i-x_offset)/2+((k-y_offset)/2+y_2)*y_width_2]=\
-                        UbVr[data_tm[(k*width_tm+i)*4+__RBYTE]] +\
-                        Vg[data_tm[(k*width_tm+i)*4+__GBYTE]] +\
-                        Vb[data_tm[(k*width_tm+i)*4+__BBYTE]] ;\
-                }\
+                yuv->u[x_2+(i-x_offset)+((k-y_offset)+y_2)*y_width_2]=\
+                    Ur[data_tm[(k*width_tm+i)*4+__RBYTE]] +\
+                    Ug[data_tm[(k*width_tm+i)*4+__GBYTE]] +\
+                    UbVr[data_tm[(k*width_tm+i)*4+__BBYTE]];\
+                yuv->v[x_2+(i-x_offset)+((k-y_offset)+y_2)*y_width_2]=\
+                    UbVr[data_tm[(k*width_tm+i)*4+__RBYTE]] +\
+                    Vg[data_tm[(k*width_tm+i)*4+__GBYTE]] +\
+                    Vb[data_tm[(k*width_tm+i)*4+__BBYTE]] ;\
             }\
         }\
     }\
@@ -288,56 +277,16 @@ extern u_int32_t *yblocks,
                                 __bit_depth__){  \
     int k,i;\
     register u_int##__bit_depth__##_t t_val;\
-    register unsigned char  *yuv_u=yuv->u+x_tm/2+(y_tm*yuv->uv_width)/2,\
-                            *yuv_v=yuv->v+x_tm/2+(y_tm*yuv->uv_width)/2,\
+    register unsigned char  *yuv_u=yuv->u+x_tm+(y_tm*yuv->uv_width),\
+                            *yuv_v=yuv->v+x_tm+(y_tm*yuv->uv_width),\
                             *_ur=Ur,*_ug=Ug,*_ubvr=UbVr,\
                             *_vg=Vg,*_vb=Vb;\
     register u_int##__bit_depth__##_t *datapi=(u_int##__bit_depth__##_t *)data,\
                                       *datapi_next=NULL,\
                             *datapi_back=(u_int##__bit_depth__##_t *)data_back,\
                             *datapi_back_next=NULL;\
-    if(__sampling_type==__PXL_AVERAGE){\
-        datapi_next=datapi+width_tm;\
-        datapi_back_next=datapi_back+width_tm;\
-        for(k=0;k<height_tm;k+=2){\
-            for(i=0;i<width_tm;i+=2){\
-                if(( (*datapi!=*datapi_back) ||\
-                    (*(datapi+1)!=*(datapi_back+1)) ||\
-                    (*datapi_next!=*datapi_back_next) ||\
-                    (*(datapi_next+1)!=*(datapi_back_next+1)))){\
-                    UPDATE_A_UV_PIXEL(  yuv_u,\
-                                        yuv_v,\
-                                        t_val,\
-                                        datapi,\
-                                        datapi_next,\
-                                        _ur,_ug,_ubvr,_vg,_vb,\
-                                        __sampling_type,\
-                                        __bit_depth__)\
-                    ublocks[POINT_IN_BLOCK(i,k,width_tm,Y_UNIT_WIDTH)]=1;\
-                    vblocks[POINT_IN_BLOCK(i,k,width_tm,Y_UNIT_WIDTH)]=1;\
-                }\
-                datapi+=2;\
-                datapi_back+=2;\
-                if(__sampling_type==__PXL_AVERAGE){\
-                    datapi_next+=2;\
-                    datapi_back_next+=2;\
-                }\
-                yuv_u++;\
-                yuv_v++;\
-            }\
-            yuv_u+=(yuv->y_width-width_tm)/2;\
-            yuv_v+=(yuv->y_width-width_tm)/2;\
-            datapi+=width_tm;\
-            datapi_back+=width_tm;\
-            if(__sampling_type==__PXL_AVERAGE){\
-                datapi_next+=width_tm;\
-                datapi_back_next+=width_tm;\
-            }\
-        }\
-    }\
-    else{\
-        for(k=0;k<height_tm;k+=2){\
-            for(i=0;i<width_tm;i+=2){\
+        for(k=0;k<height_tm;k++){\
+            for(i=0;i<width_tm;i++){\
                 if ((*datapi!=*datapi_back)){\
                     UPDATE_A_UV_PIXEL(  yuv_u,\
                                         yuv_v,\
@@ -350,25 +299,16 @@ extern u_int32_t *yblocks,
                     ublocks[POINT_IN_BLOCK(i,k,width_tm,Y_UNIT_WIDTH)]=1;\
                     vblocks[POINT_IN_BLOCK(i,k,width_tm,Y_UNIT_WIDTH)]=1;\
                 }\
-                datapi+=2;\
-                datapi_back+=2;\
-                if(__sampling_type==__PXL_AVERAGE){\
-                    datapi_next+=2;\
-                    datapi_back_next+=2;\
-                }\
+                datapi++;\
+                datapi_back++;\
                 yuv_u++;\
                 yuv_v++;\
             }\
-            yuv_u+=(yuv->y_width-width_tm)/2;\
-            yuv_v+=(yuv->y_width-width_tm)/2;\
+            yuv_u+=(yuv->y_width-width_tm);\
+            yuv_v+=(yuv->y_width-width_tm);\
             datapi+=width_tm;\
             datapi_back+=width_tm;\
-            if(__sampling_type==__PXL_AVERAGE){\
-                datapi_next+=width_tm;\
-                datapi_back_next+=width_tm;\
-            }\
         }\
-    }\
 }
 
 /**
