@@ -175,7 +175,7 @@ void rmdInitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready){
     enc_data_t->m_th_inf.aspect_denominator           = 1;
 
     enc_data_t->m_th_inf.colorspace                   = OC_CS_UNSPECIFIED;
-    enc_data_t->m_th_inf.pixelformat                  = OC_PF_420;
+    enc_data_t->m_th_inf.pixelformat                  = OC_PF_444;
 
     enc_data_t->m_th_inf.target_bitrate               = pdata->args.v_bitrate;
     enc_data_t->m_th_inf.quality                      = pdata->args.v_quality;
@@ -188,7 +188,7 @@ void rmdInitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready){
     enc_data_t->m_th_inf.keyframe_auto_threshold      = 80;
     enc_data_t->m_th_inf.keyframe_mindistance         = 8;
     enc_data_t->m_th_inf.noise_sensitivity            = 1;
-    enc_data_t->m_th_inf.sharpness                    = 2;
+    enc_data_t->m_th_inf.sharpness                    = 1;
 
     theora_encode_init(&enc_data_t->m_th_st,&enc_data_t->m_th_inf);
 
@@ -352,16 +352,16 @@ void rmdInitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready){
         enc_data_t->yuv.y=(unsigned char *)malloc(enc_data_t->m_th_inf.height*
                           enc_data_t->m_th_inf.width);
         enc_data_t->yuv.u=(unsigned char *)malloc(enc_data_t->m_th_inf.height*
-                          enc_data_t->m_th_inf.width/4);
+                          enc_data_t->m_th_inf.width);
         enc_data_t->yuv.v=(unsigned char *)malloc(enc_data_t->m_th_inf.height*
-                          enc_data_t->m_th_inf.width/4);
+                          enc_data_t->m_th_inf.width);
         enc_data_t->yuv.y_width=enc_data_t->m_th_inf.width;
         enc_data_t->yuv.y_height=enc_data_t->m_th_inf.height;
         enc_data_t->yuv.y_stride=enc_data_t->m_th_inf.width;
 
-        enc_data_t->yuv.uv_width=enc_data_t->m_th_inf.width/2;
-        enc_data_t->yuv.uv_height=enc_data_t->m_th_inf.height/2;
-        enc_data_t->yuv.uv_stride=enc_data_t->m_th_inf.width/2;
+        enc_data_t->yuv.uv_width=enc_data_t->m_th_inf.width;
+        enc_data_t->yuv.uv_height=enc_data_t->m_th_inf.height;
+        enc_data_t->yuv.uv_stride=enc_data_t->m_th_inf.width;
         enc_data_t->x_offset=enc_data_t->m_th_inf.offset_x;
         enc_data_t->y_offset=enc_data_t->m_th_inf.offset_y;
     }

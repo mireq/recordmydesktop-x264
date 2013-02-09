@@ -74,7 +74,7 @@
 //on which the y,u and v planes are broken.
 //These blocks are square.
 #define Y_UNIT_WIDTH    0x0010
-#define UV_UNIT_WIDTH   0x0008
+#define UV_UNIT_WIDTH   0x0010
 
 #endif
 

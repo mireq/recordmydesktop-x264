@@ -460,8 +460,8 @@ static boolean rmdValidateArguments(const ProgArgs *args)
         fprintf(stdout, "--v_quality must be within the inclusive range [0-63].\n");
         success = FALSE;
     }
-    if (args->v_bitrate < 45000 || args->v_quality > 2000000) {
-        fprintf(stdout, "--v_bitrate must be within the inclusive range [45000-2000000].\n");
+    if (args->v_bitrate < 0 || args->v_quality > 200000000) {
+        fprintf(stdout, "--v_bitrate must be within the inclusive range [0-200000000].\n");
         success = FALSE;
     }
     if (args->frequency <= 0) {
